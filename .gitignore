@@ -1,0 +1,21 @@
+# Unreal Engine generated
+Binaries/
+Intermediate/
+DerivedDataCache/
+Saved/
+
+# Visual Studio
+*.sln
+*.suo
+*.user
+*.userprefs
+.vs/
+
+# Visual Studio Code
+.vscode/
+
+# Xcode specific
+*.xcworkspace
+
+# Temporary
+*.log

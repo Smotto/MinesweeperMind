@@ -3,6 +3,7 @@
 #include "MinesweeperMind.h"
 #include "MinesweeperMindStyle.h"
 #include "MinesweeperMindCommands.h"
+#include "SMinesweeperMindWindow.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
 
@@ -45,13 +46,18 @@ void FMinesweeperMindModule::ShutdownModule()
 
 void FMinesweeperMindModule::PluginButtonClicked()
 {
-	// Put your "OnButtonClicked" stuff here
-	FText DialogText = FText::Format(
-							LOCTEXT("PluginButtonDialogText", "Add code to {0} in {1} to override this button's actions"),
-							FText::FromString(TEXT("FMinesweeperMindModule::PluginButtonClicked()")),
-							FText::FromString(TEXT("MinesweeperMind.cpp"))
-					   );
-	FMessageDialog::Open(EAppMsgType::Ok, DialogText);
+		TSharedRef<SWindow> Window = SNew(SWindow)
+			.Title(FText::FromString(TEXT("Minesweeper Mind")))
+			.ClientSize(FVector2D(800, 600))
+			.MinWidth(800)
+			.MinHeight(600)
+			.SizingRule(ESizingRule::UserSized);
+
+	Window->SetContent(
+		SNew(SMinesweeperMindWindow)
+	);
+	
+	FSlateApplication::Get().AddWindow(Window);
 }
 
 void FMinesweeperMindModule::RegisterMenus()

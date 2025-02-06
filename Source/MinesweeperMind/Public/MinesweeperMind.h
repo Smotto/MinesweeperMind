@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "Modules/ModuleManager.h"
@@ -10,7 +8,6 @@ class FMenuBuilder;
 class FMinesweeperMindModule : public IModuleInterface
 {
 public:
-
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
@@ -19,10 +16,8 @@ public:
 	void PluginButtonClicked();
 	
 private:
-
 	void RegisterMenus();
-
-
+	
 private:
 	TSharedPtr<class FUICommandList> PluginCommands;
 };

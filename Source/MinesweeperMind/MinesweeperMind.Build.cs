@@ -17,7 +17,9 @@ public class MinesweeperMind : ModuleRules
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				// ... add other private include paths required here ...
+                "MinesweeperMind/Private/Core",
+                "MinesweeperMind/Private/UI",
+                "MinesweeperMind/Private/Widgets"
 			}
 			);
 			

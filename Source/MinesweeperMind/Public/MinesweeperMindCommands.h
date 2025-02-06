@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "Framework/Commands/Commands.h"
@@ -8,7 +6,6 @@
 class FMinesweeperMindCommands : public TCommands<FMinesweeperMindCommands>
 {
 public:
-
 	FMinesweeperMindCommands()
 		: TCommands<FMinesweeperMindCommands>(TEXT("MinesweeperMind"), NSLOCTEXT("Contexts", "MinesweeperMind", "MinesweeperMind Plugin"), NAME_None, FMinesweeperMindStyle::GetStyleSetName())
 	{

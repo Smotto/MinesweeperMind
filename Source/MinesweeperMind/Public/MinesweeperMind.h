@@ -16,6 +16,8 @@ public:
 	void PluginButtonClicked();
 	
 private:
+	TWeakPtr<SWindow> MinesweeperWindow;
+	
 	void RegisterMenus();
 	
 private:

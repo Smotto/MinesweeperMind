@@ -46,19 +46,36 @@ void FMinesweeperMindModule::ShutdownModule()
 
 void FMinesweeperMindModule::PluginButtonClicked()
 {
-		TSharedRef<SWindow> Window = SNew(SWindow)
-			.Title(FText::FromString(TEXT("Minesweeper Mind")))
-			.ClientSize(FVector2D(800, 600))
-			.MinWidth(800)
-			.MinHeight(600)
-			.SizingRule(ESizingRule::UserSized);
+    if (MinesweeperWindow.IsValid())
+    {
+    	TSharedPtr<SWindow> ExistingWindow = MinesweeperWindow.Pin();
+    	if (ExistingWindow.IsValid())
+    	{
+    		if (ExistingWindow->IsWindowMinimized())
+    		{
+    			ExistingWindow->Restore();
+    		}
 
-	Window->SetContent(
-		SNew(SMinesweeperMindWindow)
-	);
-	
+    		FSlateApplication::Get().SetUserFocus(FSlateApplication::Get().GetUserIndexForKeyboard(), ExistingWindow, EFocusCause::SetDirectly);
+			ExistingWindow->BringToFront();
+    	}
+        return;
+    }
+
+	TSharedRef<SWindow> Window = SNew(SWindow)
+		.Title(FText::FromString(TEXT("Minesweeper Mind")))
+		.ClientSize(FVector2D(800, 600))
+		.MinWidth(800)
+		.MinHeight(600)
+		.SizingRule(ESizingRule::UserSized);
+
+	Window->SetContent(SNew(SMinesweeperMindWindow));
+
+	MinesweeperWindow = Window;
+
 	FSlateApplication::Get().AddWindow(Window);
 }
+
 
 void FMinesweeperMindModule::RegisterMenus()
 {

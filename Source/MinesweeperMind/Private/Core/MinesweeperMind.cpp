@@ -1,33 +1,93 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MinesweeperMind.h"
+
+#include "IPythonScriptPlugin.h"
 #include "MinesweeperMindStyle.h"
 #include "MinesweeperMindCommands.h"
 #include "SMinesweeperMindWindow.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
+#include "Interfaces/IPluginManager.h"
 
 static const FName MinesweeperMindTabName("MinesweeperMind");
 
 #define LOCTEXT_NAMESPACE "FMinesweeperMindModule"
+void FMinesweeperMindModule::ExecutePythonScriptFromFile(const FString& ScriptFileRelativePath)
+{
+    TSharedPtr<IPlugin> Plugin = IPluginManager::Get().FindPlugin(TEXT("MinesweeperMind"));
+    if (!Plugin.IsValid())
+    {
+        UE_LOG(LogTemp, Error, TEXT("Plugin 'MinesweeperMind' not found."));
+        return;
+    }
+    
+    FString PluginRoot = Plugin->GetBaseDir();
+    FString FullScriptPath = FPaths::Combine(*PluginRoot, *ScriptFileRelativePath);
+    
+    if (!FPaths::FileExists(FullScriptPath))
+    {
+        UE_LOG(LogTemp, Error, TEXT("Python script file not found: %s"), *FullScriptPath);
+        return;
+    }
+    
+    FString PythonScriptContent;
+    if (!FFileHelper::LoadFileToString(PythonScriptContent, *FullScriptPath))
+    {
+        UE_LOG(LogTemp, Error, TEXT("Failed to load Python script file: %s"), *FullScriptPath);
+        return;
+    }
+    
+    if (!FModuleManager::Get().IsModuleLoaded("PythonScriptPlugin"))
+    {
+        UE_LOG(LogTemp, Error, TEXT("PythonScriptPlugin module is not loaded."));
+        return;
+    }
+    
+    IPythonScriptPlugin* PythonScriptPlugin = FModuleManager::GetModulePtr<IPythonScriptPlugin>("PythonScriptPlugin");
+    if (!PythonScriptPlugin)
+    {
+        UE_LOG(LogTemp, Error, TEXT("PythonScriptPlugin pointer is null."));
+        return;
+    }
+
+    auto ExecutePython = [PythonScriptContent]()
+    {
+        IPythonScriptPlugin* PythonScriptPluginInner = FModuleManager::Get().GetModulePtr<IPythonScriptPlugin>("PythonScriptPlugin");
+        if (PythonScriptPluginInner)
+        {
+            UE_LOG(LogTemp, Log, TEXT("Executing Python script..."));
+            PythonScriptPluginInner->ExecPythonCommand(*PythonScriptContent);
+            UE_LOG(LogTemp, Log, TEXT("Executed Python agent script successfully."));
+        }
+        else
+        {
+            UE_LOG(LogTemp, Error, TEXT("PythonScriptPlugin pointer is invalid during execution."));
+        }
+    };
+
+	PythonScriptPlugin->OnPythonInitialized().AddLambda([ExecutePython]()
+	{
+		ExecutePython();
+	});
+}
 
 void FMinesweeperMindModule::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
-	
-	FMinesweeperMindStyle::Initialize();
-	FMinesweeperMindStyle::ReloadTextures();
+    // Load the LLM on startup
+    ExecutePythonScriptFromFile(TEXT("Content/Scripts/minesweeper_agent.py"));
 
-	FMinesweeperMindCommands::Register();
-	
-	PluginCommands = MakeShareable(new FUICommandList);
+    FMinesweeperMindStyle::Initialize();
+    FMinesweeperMindStyle::ReloadTextures();
+    FMinesweeperMindCommands::Register();
 
-	PluginCommands->MapAction(
-		FMinesweeperMindCommands::Get().PluginAction,
-		FExecuteAction::CreateRaw(this, &FMinesweeperMindModule::PluginButtonClicked),
-		FCanExecuteAction());
+    PluginCommands = MakeShareable(new FUICommandList);
+    PluginCommands->MapAction(
+        FMinesweeperMindCommands::Get().PluginAction,
+        FExecuteAction::CreateRaw(this, &FMinesweeperMindModule::PluginButtonClicked),
+        FCanExecuteAction());
 
-	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FMinesweeperMindModule::RegisterMenus));
+    UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FMinesweeperMindModule::RegisterMenus));
 }
 
 void FMinesweeperMindModule::ShutdownModule()
@@ -103,5 +163,5 @@ void FMinesweeperMindModule::RegisterMenus()
 }
 
 #undef LOCTEXT_NAMESPACE
-	
+	 
 IMPLEMENT_MODULE(FMinesweeperMindModule, MinesweeperMind)

@@ -34,7 +34,7 @@ void SMinesweeperWidget::Construct(const FArguments& InArgs)
             + SVerticalBox::Slot()
             .AutoHeight()
             .HAlign(HAlign_Center)
-            .Padding(0.f, 10.f) // Add spacing above
+            .Padding(0.f, 10.f)
             [
                 SAssignNew(RestartButton, SMinesweeperRestartButton)
                 .OnRestartClicked(FOnRestartClicked::CreateSP(this, &SMinesweeperWidget::RestartGame))
@@ -86,7 +86,7 @@ void SMinesweeperWidget::PlaceMines(int32 Mines)
         const int32 RandomPositionIndex = FMath::RandRange(0, AvailablePositions.Num() - 1);
         const FIntPoint MinePosition = AvailablePositions[RandomPositionIndex];
 
-        AvailablePositions.RemoveAtSwap(RandomPositionIndex, 1, EAllowShrinking::No); // Updated API
+        AvailablePositions.RemoveAtSwap(RandomPositionIndex, 1, EAllowShrinking::No);
 
         CellsWithMines[MinePosition.X][MinePosition.Y] = true;
     }

@@ -3,7 +3,7 @@
 #include "Framework/Commands/Commands.h"
 #include "MinesweeperMindStyle.h"
 
-class FMinesweeperMindCommands : public TCommands<FMinesweeperMindCommands>
+class MINESWEEPERMIND_API FMinesweeperMindCommands : public TCommands<FMinesweeperMindCommands>
 {
 public:
 	FMinesweeperMindCommands()

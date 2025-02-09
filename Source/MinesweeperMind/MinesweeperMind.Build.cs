@@ -10,7 +10,7 @@ public class MinesweeperMind : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				// ... add public include paths required here ...
+				"MinesweeperMind/Public/Core"
 			}
 			);
 				
@@ -28,7 +28,6 @@ public class MinesweeperMind : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
 			}
 			);
 			
@@ -36,16 +35,16 @@ public class MinesweeperMind : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Projects",
-				"InputCore",
-				"EditorFramework",
-				"UnrealEd",
-				"ToolMenus",
 				"CoreUObject",
+				"EditorFramework",
 				"Engine",
 				"Slate",
 				"SlateCore",
-				// ... add private dependencies that you statically link with here ...	
+				"InputCore",
+				"Projects",
+				"PythonScriptPlugin",
+				"ToolMenus",
+				"UnrealEd"
 			}
 			);
 		

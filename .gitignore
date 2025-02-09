@@ -1,3 +1,9 @@
+#Python
+*.pyc
+
+#LLMs
+*.gguf
+
 # Unreal Engine generated
 Binaries/
 Intermediate/

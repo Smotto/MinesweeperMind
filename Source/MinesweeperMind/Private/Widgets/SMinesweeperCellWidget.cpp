@@ -32,7 +32,7 @@ void SMinesweeperCellWidget::UpdateCell(const FText& InText, const FSlateColor& 
 		int32 FontSize = 24;
 		if (TextString == TEXT("💣") || TextString == TEXT("🚩"))
 		{
-			FontSize = 14;
+			FontSize = 12;
 		}
 
 		CellTextBlock->SetFont(FSlateFontInfo(FCoreStyle::GetDefaultFont(), FontSize));

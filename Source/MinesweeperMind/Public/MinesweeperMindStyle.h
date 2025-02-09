@@ -2,7 +2,7 @@
 
 #include "Styling/SlateStyle.h"
 
-class FMinesweeperMindStyle
+class MINESWEEPERMIND_API FMinesweeperMindStyle
 {
 public:
 	static void Initialize();

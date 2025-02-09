@@ -5,9 +5,11 @@
 class FToolBarBuilder;
 class FMenuBuilder;
 
-class FMinesweeperMindModule : public IModuleInterface
+class MINESWEEPERMIND_API FMinesweeperMindModule : public IModuleInterface
 {
 public:
+	static void ExecutePythonScriptFromFile(const FString& ScriptFileRelativePath);
+	
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
